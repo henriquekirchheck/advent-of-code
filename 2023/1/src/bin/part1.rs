@@ -21,5 +21,5 @@ treb7uchet";
 }
 
 fn process(input: &str) -> String {
-    day::parser1(input).sum::<usize>().to_string()
+    day::parser1(input).to_string()
 }

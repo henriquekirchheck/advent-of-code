@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::ops::RangeFrom;
 
 type Lookup = &'static [(&'static str, u8)];
@@ -42,21 +43,23 @@ fn line_parser(input: &str, lookup_range: RangeFrom<usize>) -> impl Iterator<Ite
         .flat_map(move |start| number_parser(&input[start..], &LOOKUP[lookup_range.clone()]))
 }
 
-fn parser_base(input: &str, named_numbers: bool) -> impl Iterator<Item = usize> + '_ {
+fn parser_base(input: &str, named_numbers: bool) -> usize {
     input
         .lines()
+        .par_bridge()
         .map(move |line| line_parser(line, (!named_numbers as usize * 9)..))
         .map(|mut digits| {
             let first = digits.next().unwrap();
             let last = digits.last().unwrap_or(first);
             (first * 10 + last) as usize
         })
+        .sum()
 }
 
-pub fn parser1(input: &str) -> impl Iterator<Item = usize> + '_ {
+pub fn parser1(input: &str) -> usize {
     parser_base(input, false)
 }
 
-pub fn parser2(input: &str) -> impl Iterator<Item = usize> + '_ {
+pub fn parser2(input: &str) -> usize {
     parser_base(input, true)
 }

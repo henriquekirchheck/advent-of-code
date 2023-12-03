@@ -24,5 +24,5 @@ zoneight234
 }
 
 fn process(input: &str) -> String {
-    day::parser2(input).sum::<usize>().to_string()
+    day::parser2(input).to_string()
 }
